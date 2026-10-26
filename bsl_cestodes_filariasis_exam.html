@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>វិញ្ញាសាអនុវត្ត Cestodes និង Filariasis - ថ្នាក់ BSL ឆ្នាំទី១</title>
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b1120;
+  --card: #15203b;
+  --card-border: #1e293b;
+  --primary: #38bdf8;
+  --primary-hover: #0284c7;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #f59e0b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', 'Inter', system-ui, sans-serif; }
+body { background: var(--bg); color: var(--text); min-height: 100vh; padding: 16px; display: flex; flex-direction: column; align-items: center; }
+.wrap { width: 100%; max-width: 800px; margin: 0 auto; }
+header.hero { text-align: center; margin-bottom: 20px; }
+.hero h1 { font-size: 1.35rem; color: var(--primary); margin-bottom: 6px; line-height: 1.4; }
+.hero p { color: var(--text-muted); font-size: 0.88rem; }
+.card { background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.status-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--card-border); font-size: 0.88rem; }
+.badge { background: #0369a1; color: #bae6fd; padding: 4px 10px; border-radius: 9999px; font-weight: 600; font-size: 0.75rem; }
+.timer-box { font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 6px; font-size: 1.05rem; }
+.timer-box.urgent { color: var(--danger); }
+.question-title { font-size: 1.05rem; line-height: 1.6; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+.options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.option-btn { background: #0b1120; border: 1px solid var(--card-border); color: var(--text); padding: 14px 16px; border-radius: 10px; text-align: left; font-size: 0.94rem; cursor: pointer; transition: all 0.15s ease; line-height: 1.5; display: flex; align-items: flex-start; gap: 10px; }
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: #1a253c; }
+.option-btn:disabled { cursor: default; }
+.option-btn.correct { background: rgba(34, 197, 94, 0.22) !important; border-color: var(--success) !important; color: #86efac; font-weight: 600; }
+.option-btn.wrong { background: rgba(239, 68, 68, 0.22) !important; border-color: var(--danger) !important; color: #fca5a5; }
+.letter { font-weight: 700; color: var(--primary); font-size: 1.05rem; min-width: 25px; }
+.hint-section { margin-bottom: 16px; }
+.hint-btn { background: none; border: none; color: var(--accent); font-size: 0.88rem; cursor: pointer; text-decoration: underline; padding: 0; }
+.hint-content { display: none; margin-top: 8px; background: rgba(245, 158, 11, 0.12); border-left: 3px solid var(--accent); padding: 10px 14px; border-radius: 4px; font-size: 0.88rem; color: #fde68a; line-height: 1.5; }
+.feedback-box { display: none; background: #0d1a33; border: 1px solid #2563eb; border-radius: 10px; padding: 16px; margin-bottom: 16px; line-height: 1.5; font-size: 0.9rem; }
+.feedback-box h4 { margin-bottom: 8px; color: #93c5fd; font-size: 0.95rem; }
+.controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.action-btn { background: var(--primary); color: #090d16; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: background 0.15s; }
+.action-btn:hover { background: var(--primary-hover); }
+.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.progress-wrap { margin-top: 20px; }
+.progress-bar-bg { background: #1e293b; height: 8px; border-radius: 9999px; overflow: hidden; }
+.progress-bar-fill { background: var(--primary); height: 100%; width: 4%; transition: width 0.3s; }
+.final-screen { display: none; text-align: center; padding: 36px 12px; }
+.final-score { font-size: 3rem; font-weight: 800; color: var(--primary); margin: 16px 0; }
+.review-list { margin-top: 20px; text-align: left; }
+.review-item { border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; margin-bottom: 10px; background: #0b1120; font-size: 0.88rem; }
+.review-item summary { cursor: pointer; font-weight: 700; color: var(--primary); }
+.review-item p { margin-top: 6px; color: #cbd5e1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>វិញ្ញាសាអនុវត្ត៖ Cestodes និង Filariasis</h1>
+    <p>សម្រាប់និស្សិតបច្ចេកទេសមន្ទីរពិសោធន៍ BSL ឆ្នាំទី១ • ២៥ សំណួរចៃដន្យ (Shuffle) • ៦០ វិនាទី</p>
+  </header>
+
+  <div class="card" id="quizCard">
+    <div class="status-bar">
+      <span class="badge" id="topicBadge">Cestodes / Filariae</span>
+      <span id="qCount" style="font-weight:600;">សំណួរទី 1 នៃ 25</span>
+      <div class="timer-box" id="timerBox">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="timerText">60s</span>
+      </div>
+    </div>
+
+    <div class="question-title" id="questionTitle"></div>
+
+    <div class="hint-section">
+      <button class="hint-btn" id="hintToggleBtn" onclick="toggleHint()">💡 បង្ហាញតម្រុយគ្លីនិក (Show Hint)</button>
+      <div class="hint-content" id="hintContent"></div>
+    </div>
+
+    <div class="options-grid" id="optionsGrid"></div>
+
+    <div class="feedback-box" id="feedbackBox">
+      <h4>ការពន្យល់លម្អិតក្នុងមន្ទីរពិសោធន៍ (Lab Rationale):</h4>
+      <div id="feedbackText"></div>
+    </div>
+
+    <div class="controls">
+      <span style="font-size:0.88rem; color:var(--text-muted);" id="liveScore">ពិន្ទុ: 0 / 0</span>
+      <button class="action-btn" id="nextBtn" onclick="nextQuestion()" disabled>សំណួរបន្ទាប់ →</button>
+    </div>
+  </div>
+
+  <div class="card final-screen" id="finalCard">
+    <h2>បញ្ចប់ការធ្វើតេស្ត!</h2>
+    <p style="margin-top:8px; color:var(--text-muted);">អ្នកបានឆ្លងកាត់ការអនុវត្តវិញ្ញាសា Cestodes និង Filariasis រួចរាល់ហើយ។</p>
+    <div class="final-score" id="finalScoreVal">0%</div>
+    <p id="finalFeedback" style="margin-bottom: 24px; color: #cbd5e1; font-size:1.02rem; line-height:1.6;"></p>
+    <button class="action-btn" onclick="initQuiz()">ធ្វើវិញ្ញាសាសាឡើងវិញ (Shuffle ថ្មី)</button>
+    <div class="review-list" id="reviewContainer"></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const rawQuestions = [
+  {
+    topic: "Taenia solium — ផ្លូវឆ្លង",
+    title: "អ្នកជំងឺម្នាក់មានប្រវត្តិបរិភោគសាច់ជ្រូកមិនឆ្អិនល្អ ហើយពិនិត្យឃើញព្រូនពេញវ័យនៅក្នុងពោះវៀន។ តើផ្លូវឆ្លងណាដែលសមស្របបំផុតសម្រាប់ជំងឺ intestinal taeniasis?",
+    hint: "គិតពី intermediate host របស់ T. solium និងដំណាក់កាលដែលមានក្នុងសាច់ជ្រូក។",
+    options: [
+      { text: "លេប cysticerci ក្នុងសាច់ជ្រូកឆៅ ឬឆ្អិនមិនគ្រប់", isCorrect: true },
+      { text: "លេប microfilariae ពីទឹកដែលមានមូស", isCorrect: false },
+      { text: "ត្រូវមូសខាំដែលមាន infective larvae", isCorrect: false },
+      { text: "លេប procercoid larvae ពី crustacean", isCorrect: false }
+    ],
+    rationale: "ចម្លើយត្រឹមត្រូវគឺការលេប cysticerci ក្នុងសាច់ជ្រូកឆៅ ឬឆ្អិនមិនគ្រប់ ព្រោះមនុស្សជាអ្នកផ្ទុកព្រូនពេញវ័យ (definitive host) សម្រាប់ intestinal taeniasis។ ជម្រើស B និង C ពាក់ព័ន្ធនឹង filarial transmission; ជម្រើស D ជាផ្នែកនៃវដ្ត Diphyllobothrium latum។"
+  },
+  {
+    topic: "T. solium — Cysticercosis",
+    title: "អ្នកជំងឺមានប្រកាច់ (seizures) ហើយមានប្រវត្តិអនាម័យដៃមិនល្អ។ តើការឆ្លងដំណាក់កាលណារបស់ Taenia solium អាចបង្ក neurocysticercosis?",
+    hint: "បែងចែក taeniasis ពី cysticercosis; ស៊ុត និង cysticerci មិនបង្កលទ្ធផលដូចគ្នាទេ។",
+    options: [
+      { text: "ព្រូនពេញវ័យចូលទៅក្នុងឈាមដោយផ្ទាល់", isCorrect: false },
+      { text: "ស៊ុត (eggs) ត្រូវបានលេបតាម fecal–oral route", isCorrect: true },
+      { text: "cysticerci ក្នុងសាច់ជ្រូកទៅស្ថិតក្នុងសាច់ដុំតែប៉ុណ្ណោះ", isCorrect: false },
+      { text: "proglottids របស់ T. saginata ចូលតាមស្បែក", isCorrect: false }
+    ],
+    rationale: "ការលេបស៊ុត T. solium អាចបង្កឱ្យ oncosphere ឆ្លងកាត់ជញ្ជាំងពោះវៀន ហើយ larva ធ្វើចំណាកស្រុកទៅជាលិកា រួមទាំងខួរក្បាល បង្ក neurocysticercosis។ ការលេប cysticerci ក្នុងសាច់ជ្រូកនាំទៅ intestinal taeniasis ប៉ុណ្ណោះ។"
+  },
+  {
+    topic: "Taenia — Egg morphology",
+    title: "មន្ទីរពិសោធន៍ឃើញស៊ុត Taenia រាងមូល មានជញ្ជាំងក្រាស់ និង striated wall ក្នុង stool microscopy។ តើការសន្និដ្ឋានណាត្រឹមត្រូវបំផុត?",
+    hint: "សូមចាំថាស៊ុត Taenia solium និង Taenia saginata មានរូបរាងដូចគ្នាបេះបិទ។",
+    options: [
+      { text: "អាចកំណត់ថា T. saginata ដោយ egg morphology តែប៉ុណ្ណោះ", isCorrect: false },
+      { text: "អាចកំណត់ថា T. solium ដោយទំហំស៊ុតតែប៉ុណ្ណោះ", isCorrect: false },
+      { text: "លទ្ធផលគាំទ្រ Taenia spp. ប៉ុន្តែមិនអាចបំបែក T. solium និង T. saginata បានទេ", isCorrect: true },
+      { text: "លទ្ធផលបញ្ជាក់ថាជា Diphyllobothrium latum", isCorrect: false }
+    ],
+    rationale: "ស៊ុត T. solium និង T. saginata មាន morphology ដូចគ្នាបេះបិទក្រោមមីក្រូទស្សន៍ ដូច្នេះ stool microscopy អាចកំណត់បានត្រឹម Taenia spp.។ ការញែក species តម្រូវឱ្យរាប់ខ្នែងស្បូន (uterine branches) លើ gravid proglottid ឬធ្វើ PCR។"
+  },
+  {
+    topic: "T. saginata — Uterine branches",
+    title: "នៅក្នុងកង់ព្រូនចាស់ (gravid proglottid) ដែលរកឃើញក្នុងលាមក អ្នកបច្ចេកទេសរាប់ឃើញ uterine branches ប្រហែល ១៥ ទៅ ២០ ខ្នែងនៅម្ខាងៗ។ តើជាប្រភេទព្រូនអ្វី?",
+    hint: "ប្រៀបធៀបចំនួន uterine branches របស់ T. saginata (ច្រើន) ជាមួយ T. solium (តិច ៧-១៣)។",
+    options: [
+      { text: "Taenia saginata (ព្រូនតេញ៉ាគោ)", isCorrect: true },
+      { text: "Taenia solium (ព្រូនតេញ៉ាជ្រូក)", isCorrect: false },
+      { text: "Wuchereria bancrofti", isCorrect: false },
+      { text: "Diphyllobothrium latum", isCorrect: false }
+    ],
+    rationale: "T. saginata មាន uterine branches ច្រើនចន្លោះពី 12–20 (ឬ 15–30) ខ្នែងនៅម្ខាងៗ ខណៈ T. solium មានខ្នែងតិចក្រាស់ៗចន្លោះពី 7–13 ប៉ុណ្ណោះ។"
+  },
+  {
+    topic: "Diphyllobothrium latum — Morphology",
+    title: "តើលក្ខណៈក្បាល (scolex) មួយណាដែលជួយសម្គាល់ Diphyllobothrium latum (Fish tapeworm)?",
+    hint: "គិតពីឈ្មោះចង្អូរស្រូប (Bothria ឬ sucking grooves) លើ scolex។",
+    options: [
+      { text: "មាន rostellum និងជួរទំពក់ (hooks) ច្បាស់", isCorrect: false },
+      { text: "មានចង្អូរស្រូប ventral និង dorsal sucking grooves (bothria)", isCorrect: true },
+      { text: "មានបបូរមាត់ និងប្រព័ន្ធរំលាយអាហារពេញលេញ", isCorrect: false },
+      { text: "មានបួន suckers និង rostellum មាន hooks ធំៗ", isCorrect: false }
+    ],
+    rationale: "D. latum មាន scolex រាងដូចស្លាបព្រា ឬផ្លែអាល់ម៉ុង ដែលមានចង្អូរស្រូបសងខាង (two sucking grooves / bothria) ដោយគ្មាន suckers មូលៗ ឬបន្លាទំពក់ឡើយ។"
+  },
+  {
+    topic: "D. latum — Life cycle",
+    title: "អ្នកជំងឺចូលចិត្តញ៉ាំត្រីទឹកសាបឆៅ។ តើដំណាក់កាល infective stage សម្រាប់មនុស្សរបស់ Diphyllobothrium latum គឺអ្វី?",
+    hint: "រកដំណាក់កាលដង្កូវនៅក្នុង second intermediate host (ត្រីទឹកសាប)។",
+    options: [
+      { text: "ស៊ុតដែលទើបចេញតាមលាមកភ្លាមៗ", isCorrect: false },
+      { text: "microfilariae នៅក្នុងឈាម", isCorrect: false },
+      { text: "plerocercoid larvae ក្នុងសាច់ត្រីទឹកសាប", isCorrect: true },
+      { text: "procercoid larvae ក្នុង crustacean", isCorrect: false }
+    ],
+    rationale: "Plerocercoid larvae (sparganum) នៅក្នុងសាច់ត្រីទឹកសាប (second intermediate host) គឺជា infective stage សម្រាប់មនុស្សនៅពេលបរិភោគត្រីឆៅ ឬចម្អិនមិនឆ្អិនល្អ។"
+  },
+  {
+    topic: "Cestodes — Nutrition",
+    title: "តើពពួកព្រូនសំប៉ែតកង់ៗ (Cestodes) ទទួលសារធាតុចិញ្ចឹមពីម្ចាស់ផ្ទះ (host) តាមរបៀបណា?",
+    hint: "Cestodes គ្មានប្រព័ន្ធរំលាយអាហារ និងគ្មានរន្ធមាត់ឡើយ។",
+    options: [
+      { text: "តាមរយៈពោះវៀន និងរន្ធគូថពេញលេញ", isCorrect: false },
+      { text: "ដោយបឺតឈាមតាមរន្ធមាត់ធំៗ", isCorrect: false },
+      { text: "តាមរយៈសួត និងសរសៃឈាម", isCorrect: false },
+      { text: "ស្រូបសារធាតុចិញ្ចឹមផ្ទាល់តាមផ្ទៃស្បែកក្រៅ (tegument)", isCorrect: true }
+    ],
+    rationale: "Cestodes គ្មានប្រហោងខ្លួន និងគ្មានបំពង់រំលាយអាហារ (No digestive system) ឡើយ ដូច្នេះពួកវាស្រូបយកសារធាតុចិញ្ចឹមដែលរំលាយរួចរបស់ host ដោយផ្ទាល់កាត់តាមស្រទាប់ tegument របស់វា។"
+  },
+  {
+    topic: "Filarial infection — Vector",
+    title: "អ្នកជំងឺមានជំងឺ lymphatic filariasis។ តើវ៉ិចទ័រចម្លងចម្បងសម្រាប់ Wuchereria bancrofti គឺជាសត្វល្អិតណា?",
+    hint: "មូសដែលតែងតែខាំចម្លងនៅពេលយប់។",
+    options: [
+      { text: "មូស Culex, Anopheles ឬ Aedes", isCorrect: true },
+      { text: "រុយខ្មៅ Simulium black fly", isCorrect: false },
+      { text: "រុយក្រហម Chrysops fly", isCorrect: false },
+      { text: "កង្កែបទឹកសាប Cyclops copepods", isCorrect: false }
+    ],
+    rationale: "Wuchereria bancrofti ត្រូវបានចម្លងដោយមូសពពួក Culex, Anopheles និង Aedes។ រុយខ្មៅ (Black fly) ចម្លង Onchocerca; រុយ Chrysops ចម្លង Loa loa; Cyclops ចម្លង Dracunculus។"
+  },
+  {
+    topic: "Filariasis — Blood collection timing",
+    title: "អ្នកបច្ចេកទេសយកឈាមម៉ោង ១១ ព្រឹកពីអ្នកជំងឺសង្ស័យ W. bancrofti ហើយធ្វើ smear មិនឃើញ microfilariae។ តើជំហានបន្ទាប់ដែលត្រឹមត្រូវតាមបច្ចេកទេសមន្ទីរពិសោធន៍គឺអ្វី?",
+    hint: "Microfilariae របស់ W. bancrofti មាន nocturnal periodicity (ចេញមកឈាមក្រៅពេលយប់)។",
+    options: [
+      { text: "បដិសេធការសង្ស័យ filariasis ភ្លាមៗ", isCorrect: false },
+      { text: "យកសំណាកឈាមឡើងវិញនៅពេលយប់ (10 PM - 2 AM) រួចពិនិត្យ smear", isCorrect: true },
+      { text: "ប្តូរទៅពិនិត្យលាមកជំនួសវិញ", isCorrect: false },
+      { text: "រង់ចាំ ៦ ខែទើបបណ្តុះទឹកនោមរកដង្កូវ", isCorrect: false }
+    ],
+    rationale: "Wuchereria bancrofti មាន nocturnal periodicity ដែល microfilariae ចេញមកក្នុងឈាមក្រៅច្រើនចន្លោះម៉ោង 10 យប់ ដល់ 2 ភ្លឺ។ លទ្ធផលអវិជ្ជមាននៅពេលថ្ងៃមិនអាចយកជាការបានឡើយ។"
+  },
+  {
+    topic: "Filariasis — Life cycle in vector",
+    title: "ក្នុងវដ្តជីវិតរបស់ lymphatic filaria តើមានដំណើរការអ្វីកើតឡើងបន្ទាប់ពីមូសបឺត microfilariae ពីឈាមមនុស្សចូលទៅក្នុងពោះរបស់វា?",
+    hint: "Vector ជាកន្លែងអភិវឌ្ឍ larval stage មុននឹងឆ្លងទៅមនុស្សថ្មី។",
+    options: [
+      { text: "Microfilariae ក្លាយជាព្រូនពេញវ័យភ្លាមៗក្នុងខ្លួនមូស", isCorrect: false },
+      { text: "ស៊ុតត្រូវបានបញ្ចេញតាមលាមកមូស", isCorrect: false },
+      { text: "ដង្កូវផ្លាស់សំបក និងលូតលាស់ជា infective L3 larvae ក្នុងខ្លួនមូស", isCorrect: true },
+      { text: "ដង្កូវរលាយបាត់បង់ជីវិតដោយសារទឹកប្រមាត់មូស", isCorrect: false }
+    ],
+    rationale: "Microfilariae ជ្រៀតចូលជញ្ជាំងក្រពះមូស ទៅកាន់ thoracic muscles រួចផ្លាស់សំបកលូតលាស់ក្លាយជា infective L3 larvae ដែលធ្វើដំណើរទៅកាន់មាត់មូស (proboscis) ត្រៀមខាំចម្លង។"
+  },
+  {
+    topic: "Lymphatic filariasis — Clinical sign",
+    title: "អ្នកជំងឺមានជើងហើមធំខ្លាំងរ៉ាំរ៉ៃ ស្បែកក្រាស់រដិបរដុបដូចជើងដំរី (Elephantiasis)។ តើជំងឺនេះបណ្តាលមកពីការខូចខាតប្រព័ន្ធអ្វី?",
+    hint: "ព្រូនពេញវ័យរស់នៅ និងស្ទះក្នុងប្រព័ន្ធ lymphatic vessels។",
+    options: [
+      { text: "ការស្ទះ និងរលាករ៉ាំរ៉ៃនៃប្រព័ន្ធទឹករងៃ (Lymphatic vessels/nodes)", isCorrect: true },
+      { text: "ការដុះដុំសាច់សាហាវនៅក្នុងថ្លើម", isCorrect: false },
+      { text: "ការស្ទះសរសៃឈាមអាក់ទែបេះដូង", isCorrect: false },
+      { text: "ការរលាកសន្លាក់ឆ្អឹងដោយសារអាស៊ីតអ៊ុយរិក", isCorrect: false }
+    ],
+    rationale: "Elephantiasis ក្នុងជំងឺ Lymphatic filariasis បណ្តាលមកពីព្រូនពេញវ័យរស់នៅក្នុងសរសៃទឹករងៃ បង្កការរលាក រាំងស្ទះលំហូរទឹករងៃ និងបណ្តាលឱ្យហើម lymphedema ធ្ងន់ធ្ងររហូតដល់ឡើងក្រាស់រឹង។"
+  },
+  {
+    topic: "Loa loa — Vector",
+    title: "តើសត្វល្អិតចម្លង (Vector) មួយណាដែលចម្លងព្រូនភ្នែកអាហ្វ្រិក (African eye worm: Loa loa)?",
+    hint: "រុយសេះ ឬរុយ Chrysops (deer fly/mango fly)។",
+    options: [
+      { text: "មូសខ្លា Aedes aegypti", isCorrect: false },
+      { text: "រុយ Chrysops fly (deer fly / mango fly)", isCorrect: true },
+      { text: "រុយខ្មៅ Simulium black fly", isCorrect: false },
+      { text: "ចៃក្បាល Pediculus humanus", isCorrect: false }
+    ],
+    rationale: "Loa loa ត្រូវបានចម្លងដោយរុយ Chrysops (deer fly/mango fly)។ រុយនេះខាំនៅពេលថ្ងៃ ហើយបញ្ចេញដង្កូវ L3 ចូលទៅក្នុងស្បែកមនុស្ស។"
+  },
+  {
+    topic: "Onchocerca volvulus — Vector & Disease",
+    title: "Onchocerca volvulus បង្កឱ្យមានជំងឺងងឹតភ្នែក (River blindness)។ តើវ៉ិចទ័រចម្លងរបស់វាជាសត្វល្អិតណាដែលរស់នៅក្បែរទឹកហូរលឿន?",
+    hint: "Simulium black fly។",
+    options: [
+      { text: "រុយខ្មៅ Simulium black fly", isCorrect: true },
+      { text: "មូស Culex quinquefasciatus", isCorrect: false },
+      { text: "រុយ Chrysops fly", isCorrect: false },
+      { text: "ចៃឆ្កែ Ctenocephalides canis", isCorrect: false }
+    ],
+    rationale: "Onchocerca volvulus ត្រូវបានចម្លងដោយរុយខ្មៅ Simulium (Black fly) ដែលពងកូននៅក្បែរទន្លេទឹកហូរលឿន ទើបជំងឺនេះមានឈ្មោះថា River blindness។"
+  },
+  {
+    topic: "Dracunculus medinensis — Mode of infection",
+    title: "តើមនុស្សឆ្លងព្រូនហ្គីណេ (Dracunculus medinensis ឬ Guinea worm) តាមរយៈផ្លូវណា?",
+    hint: "ផឹកទឹកមិនចម្រោះដែលមានផ្ទុកសត្វកណ្តូបទឹកតូចៗ (Cyclops / copepods)។",
+    options: [
+      { text: "ត្រូវមូសខាំពេលយប់", isCorrect: false },
+      { text: "ញ៉ាំសាច់គោឆៅមានពងព្រូន", isCorrect: false },
+      { text: "ផឹកទឹកមិនចម្រោះដែលមានផ្ទុក Cyclops (copepods) មានដង្កូវព្រូន", isCorrect: true },
+      { text: "ដើរជើងទទេលើដីភក់សើម", isCorrect: false }
+    ],
+    rationale: "Dracunculus medinensis ឆ្លងតាមរយៈការផឹកទឹកស្ទឹង ឬស្រះដែលមិនបានចម្រោះ ដែលមានផ្ទុកសត្វល្អិតទឹកតូចៗ Cyclops (copepods) ផ្ទុកដង្កូវ infective larvae។"
+  },
+  {
+    topic: "Microfilariae — Laboratory Staining",
+    title: "ដើម្បីពិនិត្យរក Microfilariae ក្នុងឈាមក្រៅ (Peripheral blood smear) តើវិធីជ្រលក់ពណ៌ (staining) ណាដែលជាស្តង់ដារក្នុងមន្ទីរពិសោធន៍?",
+    hint: "ពណ៌ដែលពេញនិយមប្រើក្នុងផ្នែក Hematology/Parasitology សម្រាប់ឈាម។",
+    options: [
+      { text: "Gram stain", isCorrect: false },
+      { text: "Giemsa stain ឬ Wright's stain", isCorrect: true },
+      { text: "Acid-Fast stain (ZN stain)", isCorrect: false },
+      { text: "India ink wet mount", isCorrect: false }
+    ],
+    rationale: "ការធ្វើ blood film (thick and thin smear) រួចជ្រលក់ពណ៌ Giemsa ឬ Wright's stain គឺជាវិធីសាស្ត្រស្តង់ដារសម្រាប់សង្កេតមើលរូបរាង សំបកស្រោប (sheath) និងគ្រាប់ nuclei របស់ microfilariae។"
+  },
+  {
+    topic: "Filariasis — Diagnostic Reasoning",
+    title: "អ្នកជំងឺមានអាការៈហើមជើងរ៉ាំរ៉ៃ ប៉ុន្តែលទ្ធផល Thick blood smear មួយលើកនៅពេលយប់អវិជ្ជមាន។ តើការបកស្រាយណាសមស្របបំផុត?",
+    hint: "កម្រិត microfilariae អាចទាប ឬព្រូនពេញវ័យងាប់បន្សល់តែស្លាកស្នាមស្ទះ។",
+    options: [
+      { text: "លទ្ធផលអវិជ្ជមានមួយលើកមិនទាន់អាចបដិសេធ filariasis ទាំងស្រុងបានទេ", isCorrect: true },
+      { text: "បញ្ជាក់ ១០០% ថាអ្នកជំងឺគ្មានជំងឺ filariasis ឡើយ", isCorrect: false },
+      { text: "បញ្ជាក់ថាអ្នកជំងឺឆ្លង Taenia solium ក្នុងថ្លើម", isCorrect: false },
+      { text: "ត្រូវចាប់ផ្តើមព្យាបាលជំងឺគ្រុនចាញ់ភ្លាមៗ", isCorrect: false }
+    ],
+    rationale: "លទ្ធផល blood smear អវិជ្ជមានតែមួយលើកមិនគ្រប់គ្រាន់ដើម្បីបដិសេធ filariasis ឡើយ ព្រោះកម្រិតដង្កូវអាចទាបខ្លាំង ឬក្នុងដំណាក់កាល elephantiasis រ៉ាំរ៉ៃ ដង្កូវពេញវ័យអាចងាប់អស់បន្សល់តែការស្ទះ ដូច្នេះអាចត្រូវការធ្វើតេស្តរក Antigen (Filarial antigen test) បន្ថែម។"
+  },
+  {
+    topic: "Taenia — Proglottid morphology",
+    title: "ដើម្បីញែកដាច់រវាង Taenia solium និង Taenia saginata ពេលពិនិត្យកង់ព្រូនចាស់ (Gravid proglottid) តើអ្នកបច្ចេកទេសត្រូវរាប់អ្វី?",
+    hint: "រាប់ចំនួនខ្នែងស្បូននៅសងខាងនៃ proglottid។",
+    options: [
+      { text: "រាប់ចំនួនខ្នែងស្បូននៅសងខាង (Uterine lateral branches)", isCorrect: true },
+      { text: "រាប់ចំនួនស៊ុតដែលនៅខាងក្នុង", isCorrect: false },
+      { text: "វាស់កម្រាស់សំបកខាងក្រៅ", isCorrect: false },
+      { text: "ពិនិត្យពណ៌របស់កង់ព្រូន", isCorrect: false }
+    ],
+    rationale: "ការរាប់ខ្នែងស្បូន (Uterine lateral branches) លើកង់ព្រូន gravid proglottid គឺជាវិធីចម្បង៖ T. solium មាន 7–13 ខ្នែង (តិច) ខណៈ T. saginata មាន 15–20 ឬច្រើនជាង (ច្រើន)។"
+  },
+  {
+    topic: "T. solium — Host roles",
+    title: "ក្នុងវដ្តជីវិតរបស់ Taenia solium តើមនុស្សដើរតួនាទីជាអ្វីនៅពេលកើតជំងឺ Cysticercosis (គីសក្នុងជាលិកា)?",
+    hint: "ពេលផ្ទុកដំណាក់កាលកូនដង្កូវ (Larval stage) មនុស្សដើរតួជាអ្វី?",
+    options: [
+      { text: "Definitive host", isCorrect: false },
+      { text: "Intermediate host (ម្ចាស់ផ្ទះកណ្តាល)", isCorrect: true },
+      { text: "Paratenic host តែប៉ុណ្ណោះ", isCorrect: false },
+      { text: "Vector ចម្លងរោគ", isCorrect: false }
+    ],
+    rationale: "នៅពេលមនុស្សលេបស៊ុត T. solium ហើយកកើតជាគីស larval stage (Cysticerci) ក្នុងសាច់ដុំ ឬខួរក្បាល នោះមនុស្សដើរតួនាទីជា Intermediate host ដូចសត្វជ្រូកដែរ។"
+  },
+  {
+    topic: "Diphyllobothrium latum — Vitamin deficiency",
+    title: "ការឆ្លងព្រូន Diphyllobothrium latum (Fish tapeworm) យូរអង្វែង អាចបណ្តាលឱ្យអ្នកជំងឺខ្វះជីវជាតិអ្វីដែលនាំឱ្យកើត megaloblastic anemia?",
+    hint: "ព្រូននេះស្រូបយកវីតាមីនមួយយ៉ាងច្រើនពីពោះវៀនមនុស្ស។",
+    options: [
+      { text: "វីតាមីន C", isCorrect: false },
+      { text: "វីតាមីន B12 (Vitamin B12)", isCorrect: true },
+      { text: "វីតាមីន D", isCorrect: false },
+      { text: "វីតាមីន K", isCorrect: false }
+    ],
+    rationale: "Diphyllobothrium latum មានទំនោរស្រូបយក Vitamin B12 យ៉ាងច្រើនពីពោះវៀនរបស់ host ដែលបណ្តាលឱ្យអ្នកជំងឺខ្វះ B12 និងកើតជំងឺស្លេកស្លាំង Megaloblastic (Pernicious-like) anemia។"
+  },
+  {
+    topic: "Taenia saginata — Intermediate host",
+    title: "តើសត្វមួយណាជាម្ចាស់ផ្ទះកណ្តាល (Intermediate host) ធម្មជាតិសម្រាប់ Taenia saginata?",
+    hint: "Beef tapeworm។",
+    options: [
+      { text: "សត្វជ្រូក (Pig)", isCorrect: false },
+      { text: "សត្វគោក្របី (Cattle / Cow)", isCorrect: true },
+      { text: "សត្វឆ្កែ (Dog)", isCorrect: false },
+      { text: "ត្រីទឹកសាប (Freshwater fish)", isCorrect: false }
+    ],
+    rationale: "Taenia saginata គឺជា Beef tapeworm ដែលមានសត្វគោក្របីជា intermediate host ផ្ទុក cysticerci (Cysticercus bovis) ក្នុងសាច់ដុំរបស់វា។"
+  },
+  {
+    topic: "Hymenolepis nana — Dwarf tapeworm",
+    title: "តើ Cestode មួយណាដែលត្រូវបានគេស្គាល់ថា 'Dwarf tapeworm' ហើយអាចបញ្ចប់វដ្តជីវិតទាំងស្រុងក្នុងខ្លួនមនុស្សដោយមិនបាច់មាន intermediate host?",
+    hint: "ព្រូនតេញ៉ាតឿដែលមានប្រវែងតូចខ្លាំង។",
+    options: [
+      { text: "Taenia solium", isCorrect: false },
+      { text: "Hymenolepis nana", isCorrect: true },
+      { text: "Diphyllobothrium latum", isCorrect: false },
+      { text: "Echinococcus granulosus", isCorrect: false }
+    ],
+    rationale: "Hymenolepis nana (Dwarf tapeworm) គឺជាព្រូនតេញ៉ាតែមួយគត់ដែលអាចឆ្លងផ្ទាល់ពីមនុស្សទៅមនុស្ស (Direct cycle / Autoinfection) ដោយមិនចាំបាច់មាន intermediate host ជាកាតព្វកិច្ចឡើយ។"
+  },
+  {
+    topic: "Echinococcus granulosus — Hydatid cyst",
+    title: "Echinococcus granulosus បង្កជាគីសទឹកថ្លាធំៗក្នុងថ្លើម ឬសួត (Hydatid cyst)។ តើសត្វណាជា Definitive host ធម្មជាតិរបស់វា?",
+    hint: "សត្វចិញ្ចឹមដែលស៊ីសរីរាង្គសត្វចៀម ឬគោដែលមានគីស។",
+    options: [
+      { text: "សត្វឆ្កែ និងពពួក Canines", isCorrect: true },
+      { text: "សត្វឆ្មា", isCorrect: false },
+      { text: "សត្វជ្រូក", isCorrect: false },
+      { text: "សត្វមាន់ទា", isCorrect: false }
+    ],
+    rationale: "សត្វឆ្កែ (Dog/Canines) គឺជា definitive host របស់ Echinococcus granulosus ដែលផ្ទុកព្រូនពេញវ័យតូចៗក្នុងពោះវៀន និងបញ្ចេញស៊ុតមកក្រៅតាមលាមក។"
+  },
+  {
+    topic: "Brugia malayi — Vector & Sheath",
+    title: "Microfilariae របស់ Brugia malayi ត្រូវបានពិនិត្យលើ blood smear។ តើលក្ខណៈមីក្រូទស្សន៍មួយណាដែលជួយសម្គាល់វា?",
+    hint: "មានសំបកស្រោប (sheathed) និងមានគ្រាប់ nuclei ដាច់ពីរនៅចុងកន្ទុយ។",
+    options: [
+      { text: "គ្មានស្រោបសំបក (Unsheathed) និងកន្ទុយស្រួចគ្មាន nuclei", isCorrect: false },
+      { text: "មានស្រោបសំបក (Sheathed) និងមាន terminal nuclei ពីរដាច់ដោយឡែកនៅចុងកន្ទុយ", isCorrect: true },
+      { text: "មានរាងដូចអក្សរ C គ្មានស្នូលកោសិកា", isCorrect: false },
+      { text: "មានភ្នាសក្រាស់ពណ៌លឿងដូចពងព្រូន", isCorrect: false }
+    ],
+    rationale: "Brugia malayi microfilaria មានស្រោបសំបកថ្លាពីក្រៅ (Sheathed) និងមានលក្ខណៈពិសេសគឺមានគ្រាប់ nuclei ពីរដាច់ដោយឡែកពីគ្នានៅចុងកន្ទុយ (Two distinct terminal nuclei)។"
+  },
+  {
+    topic: "Mansonella perstans — Body fluid",
+    title: "តើ microfilariae របស់ Mansonella perstans មានលក្ខណៈបែបណាទាក់ទងនឹងវត្តមានសំបកស្រោប (Sheath)?",
+    hint: "មិនដូច Wuchereria bancrofti ទេ ព្រូនមួយនេះគ្មានសំបកស្រោបឡើយ។",
+    options: [
+      { text: "គ្មានសំបកស្រោប (Unsheathed)", isCorrect: true },
+      { text: "មានសំបកស្រោបក្រាស់ណាស់ (Thickly sheathed)", isCorrect: false },
+      { text: "មានសំបកស្រោបតែនៅពេលថ្ងៃ", isCorrect: false },
+      { text: "រលាយសំបកស្រោបភ្លាមៗក្នុងទឹកអំបិល", isCorrect: false }
+    ],
+    rationale: "Microfilariae របស់ Mansonella species (ដូចជា M. perstans, M. ozzardi, M. streptocerca) គឺជាប្រភេទគ្មានសំបកស្រោប (Unsheathed)។"
+  },
+  {
+    topic: "Laboratory Safety — Stool Examination",
+    title: "នៅពេលអ្នកបច្ចេកទេសមន្ទីរពិសោធន៍កាន់កាប់សំណាកលាមកដែលមានសង្ស័យពង Taenia solium ហេតុអ្វីបានជាត្រូវមានការប្រុងប្រយ័ត្នខ្ពស់បំផុតចំពោះ Biosafety?",
+    hint: "ការច្រឡំលេបពង T. solium អាចបង្កឱ្យកើតគីសក្នុងខួរក្បាលខ្លួនឯង។",
+    options: [
+      { text: "ព្រោះពងព្រូនអាចផ្ទុះបញ្ចេញឧស្ម័នពុល", isCorrect: false },
+      { text: "ព្រោះការលេបពង T. solium ដោយអចេតនាអាចបង្កជាជំងឺ Cysticercosis ធ្ងន់ធ្ងរដល់ខ្លួនឯង", isCorrect: true },
+      { text: "ព្រោះពងព្រូនអាចឆ្លងតាមការសម្លឹងមើលមីក្រូទស្សន៍", isCorrect: false },
+      { text: "ព្រោះវានឹងបំផ្លាញស្លាយកញ្ចក់មន្ទីរពិសោធន៍", isCorrect: false }
+    ],
+    rationale: "ខុសពី T. saginata ពងរបស់ Taenia solium មានគ្រោះថ្នាក់ខ្លាំងចំពោះបុគ្គលិកមន្ទីរពិសោធន៍ ពីព្រោះប្រសិនបើមានការធ្វេសប្រហែសលេបស៊ុតចូលតាមមាត់ (Accidental ingestion) អ្នកបច្ចេកទេសផ្ទាល់នឹងកើតជំងឺ Cysticercosis (គីសក្នុងខួរក្បាល ឬជាលិកា)។"
+  }
+];
+
+function shuffleArray(arr) {
+  const newArr = [...arr];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+}
+
+let activeQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let timeLeft = 60;
+let timerInterval = null;
+let answered = false;
+let userResults = [];
+
+function initQuiz() {
+  activeQuestions = shuffleArray(rawQuestions).map(q => {
+    return {
+      ...q,
+      options: shuffleArray(q.options)
+    };
+  });
+  
+  currentIndex = 0;
+  score = 0;
+  userResults = [];
+  document.getElementById('finalCard').style.display = 'none';
+  document.getElementById('quizCard').style.display = 'block';
+  loadQuestion(currentIndex);
+}
+
+function loadQuestion(index) {
+  answered = false;
+  timeLeft = 60;
+  clearInterval(timerInterval);
+  
+  const q = activeQuestions[index];
+  document.getElementById('topicBadge').textContent = q.topic;
+  document.getElementById('qCount').textContent = `សំណួរទី ${index + 1} នៃ ${activeQuestions.length}`;
+  document.getElementById('questionTitle').textContent = `${index + 1}. ${q.title}`;
+  
+  document.getElementById('hintContent').textContent = q.hint;
+  document.getElementById('hintContent').style.display = 'none';
+  document.getElementById('feedbackBox').style.display = 'none';
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('nextBtn').textContent = (index === activeQuestions.length - 1) ? "ពិនិត្យលទ្ធផល →" : "សំណួរបន្ទាប់ →";
+  
+  const optionsGrid = document.getElementById('optionsGrid');
+  optionsGrid.innerHTML = '';
+  q.options.forEach((optObj, optIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="letter">${String.fromCharCode(65 + optIdx)}.</span> <span>${optObj.text}</span>`;
+    btn.onclick = () => selectOption(optIdx);
+    optionsGrid.appendChild(btn);
+  });
+  
+  updateTimerUI();
+  timerInterval = setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      updateTimerUI();
+    } else {
+      clearInterval(timerInterval);
+      if (!answered) {
+        handleTimeout();
+      }
+    }
+  }, 1000);
+  
+  updateProgress();
+}
+
+function updateTimerUI() {
+  const el = document.getElementById('timerText');
+  const box = document.getElementById('timerBox');
+  el.textContent = timeLeft + 's';
+  if (timeLeft <= 10) {
+    box.classList.add('urgent');
+  } else {
+    box.classList.remove('urgent');
+  }
+}
+
+function toggleHint() {
+  const h = document.getElementById('hintContent');
+  h.style.display = h.style.display === 'none' ? 'block' : 'none';
+}
+
+function selectOption(chosenIdx) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+  
+  const q = activeQuestions[currentIndex];
+  const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(btn => btn.disabled = true);
+  
+  const correctIdx = q.options.findIndex(o => o.isCorrect);
+  const isCorrect = q.options[chosenIdx].isCorrect;
+  
+  if (isCorrect) {
+    score++;
+    buttons[chosenIdx].classList.add('correct');
+  } else {
+    buttons[chosenIdx].classList.add('wrong');
+    buttons[correctIdx].classList.add('correct');
+  }
+  
+  userResults.push({
+    q: q.title,
+    chosen: q.options[chosenIdx].text,
+    correctText: q.options[correctIdx].text,
+    isCorrect: isCorrect,
+    why: q.rationale
+  });
+  
+  document.getElementById('liveScore').textContent = `ពិន្ទុ: ${score} / ${currentIndex + 1}`;
+  document.getElementById('feedbackText').textContent = q.rationale;
+  document.getElementById('feedbackBox').style.display = 'block';
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function handleTimeout() {
+  answered = true;
+  const q = activeQuestions[currentIndex];
+  const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(btn => btn.disabled = true);
+  const correctIdx = q.options.findIndex(o => o.isCorrect);
+  buttons[correctIdx].classList.add('correct');
+  
+  userResults.push({
+    q: q.title,
+    chosen: "អស់ពេល (Time Expired)",
+    correctText: q.options[correctIdx].text,
+    isCorrect: false,
+    why: q.rationale
+  });
+  
+  document.getElementById('feedbackText').innerHTML = '<strong style="color:#ef4444;">អស់ពេល ៦០ វិនាទី! (Time Expired)</strong><br>' + q.rationale;
+  document.getElementById('feedbackBox').style.display = 'block';
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex < activeQuestions.length) {
+    loadQuestion(currentIndex);
+  } else {
+    showFinalResults();
+  }
+}
+
+function updateProgress() {
+  const pct = ((currentIndex + 1) / activeQuestions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function showFinalResults() {
+  document.getElementById('quizCard').style.display = 'none';
+  document.getElementById('finalCard').style.display = 'block';
+  const pct = Math.round((score / activeQuestions.length) * 100);
+  document.getElementById('finalScoreVal').textContent = `${score} / ${activeQuestions.length} (${pct}%)`;
+  
+  let msg = '';
+  if (pct >= 80) msg = 'ល្អប្រសើរណាស់! អ្នកយល់ច្បាស់ពីមេរៀន Cestodes និង Filariasis សម្រាប់ត្រៀមប្រឡងឆមាស។';
+  else if (pct >= 60) msg = 'លទ្ធផលល្អបង្គួរ! គួររំលឹកបន្ថែមលើវ៉ិចទ័រចម្លង (Vectors) និងការបែងចែកកង់ព្រូន Taenia។';
+  else msg = 'ត្រូវរំលឹកមេរៀនឡើងវិញ ជាពិសេស periodicity នៃ microfilariae និងវិធីសាស្ត្រធ្វើតេស្តមន្ទីរពិសោធន៍។';
+  document.getElementById('finalFeedback').textContent = msg;
+
+  const reviewEl = document.getElementById('reviewContainer');
+  reviewEl.innerHTML = '<h3 style="margin-bottom:12px; color:var(--primary);">ពិនិត្យចម្លើយលម្អិត (Answer Review):</h3>' + 
+    userResults.map((r, i) => `
+      <details class="review-item">
+        <summary>${i + 1}. ${r.isCorrect ? "✓ ត្រឹមត្រូវ" : "✗ ខុស"} — ${r.q.substring(0, 50)}...</summary>
+        <p><strong>សំណួរពេញលេញ៖</strong> ${r.q}</p>
+        <p><strong>ចម្លើយរបស់អ្នក៖</strong> <span style="color:${r.isCorrect ? '#86efac' : '#fca5a5'}">${r.chosen}</span></p>
+        <p><strong>ចម្លើយត្រឹមត្រូវ៖</strong> <span style="color:#86efac">${r.correctText}</span></p>
+        <p><strong>ការពន្យល់៖</strong> ${r.why}</p>
+      </details>
+    `).join('');
+}
+
+window.onload = initQuiz;
+</script>
+</body>
+</html>
